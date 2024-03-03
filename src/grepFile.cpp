@@ -9,6 +9,11 @@ std::vector<std::string> *loadFile(std::string filePath)
     // Loads the file
     std::ifstream loadedFile(filePath);
 
+    if (!loadedFile.good())
+    {
+        return nullptr;
+    }
+
     // Loops through the lines and adds them to the vector
     std::string line;
     while(std::getline(loadedFile, line))

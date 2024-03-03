@@ -1,5 +1,4 @@
-
-/// Increment 1
+/// Used in increment 1
 
 /// Standalone is a program state that's run when no other arguments are given for the program.
 
@@ -8,3 +7,4 @@
 #include <string>
 
 void standaloneStringFinder();
+int findStringPos(const std::string &mainString, const std::string &keyString);

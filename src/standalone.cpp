@@ -23,3 +23,30 @@ void standaloneStringFinder()
         std::cout << std::endl << "'" << keyString << "' NOT found in '" << mainString << "'";
     }
 }
+
+// Surprised this worked like it did in my head
+int findStringPos(const std::string &mainString, const std::string &keyString)
+{   
+    int keyStringIterator = 0;
+
+    // Goes through the string letter by letter if the letters match
+    for (int i = 0; i < mainString.length(); i++)
+    {
+        if (mainString[i] == keyString[keyStringIterator])
+        {
+            if (keyStringIterator == keyString.length() - 1)
+            {
+                return i - keyStringIterator; // Return the pos
+            }
+            keyStringIterator++;
+        }
+        else
+        {
+            keyStringIterator = 0;
+        }
+    }
+
+    // Shouldn't really happen unless my code is ass
+    // -1 would mean no match was found, but this code is only run if foundInString return true
+    return -1;
+}

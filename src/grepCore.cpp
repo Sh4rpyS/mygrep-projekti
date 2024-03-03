@@ -9,22 +9,42 @@ void grepMain(int argc, char *argv[])
     {
         standaloneStringFinder();
     }
+    // The program uses a file, a keyword, but no options
     else if (argc == 3)
     {
-        bool matches = checkLines(argv[1], loadFile(argv[2]));
+        std::vector<std::string> *lines = loadFile(argv[2]);
+
+        // Error handling
+        if (lines == nullptr)
+        {   
+            std::cout << "File either not found or no permissions to read.";
+            return;
+        }
+
+        bool matches = checkLines(argv[1], lines);
         
         if (!matches)
         {
-            std::cout << "No references of " << argv[1] << " were found in " << argv[2] << ".";
+            std::cout << std::endl << "No references of " << argv[1] << " were found in " << argv[2] << ".";
         }
     }
+    // Same as previously, but this time the program uses options
     else if (argc == 4) 
     {
-        bool matches = checkLines(argv[2], loadFile(argv[3]), stripOptions(argv[1]));
+        std::vector<std::string> *lines = loadFile(argv[3]);
+
+        // Error handling
+        if (lines == nullptr)
+        {   
+            std::cout << "File either not found or no permissions to read.";
+            return;
+        }
+
+        bool matches = checkLines(argv[2], lines, stripOptions(argv[1]));
         
         if (!matches)
         {
-            std::cout << "No references of " << argv[2] << " were found in " << argv[3] << ".";
+            std::cout << std::endl << "No references of " << argv[2] << " were found in " << argv[3] << ".";
         }
     }
     else
@@ -33,45 +53,14 @@ void grepMain(int argc, char *argv[])
     }
 }
 
-void printVector(std::vector<std::string> &vector)
-{
-    for (std::string item : vector)
-    {
-        std::cout << item << std::endl;
-    }
-}
-
 // Returns either true or false if the keyString is/is not in mainString
-bool foundInString(const std::string &mainString, const std::string &keyString)
+bool foundInString(const std::string &mainString, const std::string &keyString, const bool reversed)
 {
-    return (mainString.find(keyString) != std::string::npos);
-}
-
-// Surprised this worked like it did in my head
-int findStringPos(const std::string &mainString, const std::string &keyString)
-{   
-    int keyStringIterator = 0;
-
-    // Goes through the string letter by letter if the letters match
-    for (int i = 0; i < mainString.length(); i++)
+    if (reversed) 
     {
-        if (mainString[i] == keyString[keyStringIterator])
-        {
-            if (keyStringIterator == keyString.length() - 1)
-            {
-                return i - keyStringIterator; // Return the pos
-            }
-            keyStringIterator++;
-        }
-        else
-        {
-            keyStringIterator = 0;
-        }
+        return (mainString.find(keyString) == std::string::npos);
     }
-
-    // Shouldn't really happen unless my code is ass
-    // -1 would mean no match was found, but this code is only run if foundInString return true
-    return -1;
+    return (mainString.find(keyString) != std::string::npos);
 }
 
 // Gets rid of the "-o" so and just returns the options
@@ -92,15 +81,33 @@ bool checkLines(std::string keyString, std::vector<std::string> *lines, std::str
     // Stores all the matching file lines
     std::vector<std::string> matchingLines;
     
+    std::string keyStringModified = keyString;
+
+    // Check if the i (ignore upper/lowercase) option is used
+    if (i)
+    {
+        // Changes keyString to be lowercase, so any previous differences will be eliminated
+        std::transform(keyStringModified.begin(), keyStringModified.end(), keyStringModified.begin(), ::tolower);
+    }
+
     // Goes through line by line
     int lineNumber = 1;
     for (std::string line : *lines)
     {
-        if (foundInString(line, keyString))
+        // Check if the i (ignore upper/lowercase) option is used
+        if (i)
         {
+            // Changes the line to be lowercase, so any previous differences will be eliminated
+            std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+        }
+
+        // foundInString also reverses the return if r (reverse search) was enabled
+        if (foundInString(line, keyStringModified, r))
+        {
+            // Check if the l (show line numbering) option is used
             if (l)
             {
-                std::cout << lineNumber << ": ";
+                std::cout << lineNumber << ":";
             }
             std::cout << line << std::endl;
             matchingLines.push_back(line);
@@ -109,6 +116,7 @@ bool checkLines(std::string keyString, std::vector<std::string> *lines, std::str
         lineNumber++;
     }
 
+    // Check if the o (occurences) option is used
     if (o)
     {
         std::cout << std::endl << "Occurences of lines containing '" << keyString << "': " << matchingLines.size();

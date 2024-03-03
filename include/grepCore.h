@@ -4,13 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 void grepMain(int argc, char *argv[]);
 
-void printVector(std::vector<std::string> &vector);
-
-bool foundInString(const std::string &mainString, const std::string &keyString);
-int findStringPos(const std::string &mainString, const std::string &keyString);
+bool foundInString(const std::string &mainString, const std::string &keyString, const bool reversed = false);
 
 std::string stripOptions(std::string options);
 
