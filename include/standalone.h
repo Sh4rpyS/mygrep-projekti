@@ -6,5 +6,5 @@
 #include <iostream>
 #include <string>
 
-void standaloneStringFinder();
+void standaloneStringFinder(const std::string options = "");
 int findStringPos(const std::string &mainString, const std::string &keyString);

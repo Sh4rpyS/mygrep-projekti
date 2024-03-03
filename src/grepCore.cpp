@@ -9,6 +9,11 @@ void grepMain(int argc, char *argv[])
     {
         standaloneStringFinder();
     }
+    // The program does not use a file, but does use options
+    else if (argc == 2)
+    {
+        standaloneStringFinder(stripOptions(argv[1]));
+    }
     // The program uses a file, a keyword, but no options
     else if (argc == 3)
     {

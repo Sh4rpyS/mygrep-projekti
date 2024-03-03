@@ -1,8 +1,10 @@
 #include <standalone.h>
 #include <grepCore.h>
 
-void standaloneStringFinder()
+void standaloneStringFinder(const std::string options)
 {
+    bool i = foundInString(options, "i");
+
     std::string mainString;
     std::string keyString;
 
@@ -12,10 +14,21 @@ void standaloneStringFinder()
     std::cout << "Give search string: ";
     std::getline(std::cin, keyString);
 
-    // Checks if the string is found to make my garbo code not run even if the keyString is not in the string
-    if (foundInString(mainString, keyString)) // True
+    std::string mainStringModified = mainString;
+    std::string keyStringModified = keyString;
+
+    // Check if the i (ignore upper/lowercase) option is used
+    if (i)
     {
-        int pos = findStringPos(mainString, keyString);
+        // Changes keyString to be lowercase, so any previous differences will be eliminated
+        std::transform(mainStringModified.begin(), mainStringModified.end(), mainStringModified.begin(), ::tolower);
+        std::transform(keyStringModified.begin(), keyStringModified.end(), keyStringModified.begin(), ::tolower);
+    }
+
+    // Checks if the string is found to make my garbo code not run even if the keyString is not in the string
+    if (foundInString(mainStringModified, keyStringModified)) // True
+    {
+        int pos = findStringPos(mainStringModified, keyStringModified);
         std::cout << std::endl << "'" << keyString << "' found in '" << mainString << "' in position " << pos;
     }
     else // False
