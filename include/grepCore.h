@@ -9,7 +9,9 @@ void grepMain(int argc, char *argv[]);
 
 void printVector(std::vector<std::string> &vector);
 
-bool foundInString(std::string &mainString, std::string &keyString);
-int findStringPos(std::string &mainString, std::string &keyString);
+bool foundInString(const std::string &mainString, const std::string &keyString);
+int findStringPos(const std::string &mainString, const std::string &keyString);
 
-std::vector<std::string> *findFromLines(std::string keyString, std::vector<std::string> *lines);
+std::string stripOptions(std::string options);
+
+bool checkLines(std::string keyString, std::vector<std::string> *lines, std::string options = "");
