@@ -19,10 +19,8 @@ void grepMain(int argc, char *argv[])
     {
         std::vector<std::string> *lines = loadFile(argv[2]);
 
-        // Error handling
-        if (lines == nullptr)
-        {   
-            std::cout << "File either not found or no permissions to read.";
+        if (lines == nullptr) 
+        {
             return;
         }
 
@@ -38,15 +36,13 @@ void grepMain(int argc, char *argv[])
     {
         std::vector<std::string> *lines = loadFile(argv[3]);
 
-        // Error handling
-        if (lines == nullptr)
-        {   
-            std::cout << "File either not found or no permissions to read.";
+        if (lines == nullptr) 
+        {
             return;
         }
 
         bool matches = checkLines(argv[2], lines, stripOptions(argv[1]));
-        
+
         if (!matches)
         {
             std::cout << std::endl << "No references of " << argv[2] << " were found in " << argv[3] << ".";

@@ -16,3 +16,7 @@ Käynnistäessä ohjelman komentorivillä voit valita miten ohjelma toimii:
     * o = Occurences, ohjelma ilmoittaa kuinka monta kertaa avainsana löytyi.
     * i = Ignore upper/lowercase letters, ohjelma etsii avainsanaa huolimatta siitä, onko sanoissa pieniä vai isoja alkukirjaimia.
     * r = Reverse search, ohjelma etsii millä rivillä ei ole kyseistä avainsanaa.
+
+# Ohjelman kääntäminen
+Ohjelma on käännetty staattieseti GCC g++ kääntäjällä (Versio: 13.1.0) ja se käyttää c++20 standardia. Ohjelman kääntökomento:
+- g++ -o mygrep.exe src/*.cpp -Iinclude -static -static-libgcc -std=c++20

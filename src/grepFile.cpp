@@ -6,22 +6,33 @@ std::vector<std::string> *loadFile(std::string filePath)
     // Stores all the file lines
     static std::vector<std::string> fileLines;
 
-    // Loads the file
-    std::ifstream loadedFile(filePath);
-
-    if (!loadedFile.good())
+    try 
     {
-        return nullptr;
-    }
+        // Loads the file
+        std::ifstream loadedFile(filePath);
 
-    // Loops through the lines and adds them to the vector
-    std::string line;
-    while(std::getline(loadedFile, line))
+        if (!loadedFile.good())
+        {
+            throw -1;
+        }
+
+        // Loops through the lines and adds them to the vector
+        std::string line;
+        while(std::getline(loadedFile, line))
+        {
+            fileLines.push_back(line);
+        }
+
+        loadedFile.close();
+
+        return &fileLines;
+    }
+    catch (int error)
     {
-        fileLines.push_back(line);
+        if (error == -1)
+        {
+            std::cout << error << ": File either not found or it is restricted.";
+        }
     }
-
-    loadedFile.close();
-
-    return &fileLines;
+    return nullptr;
 }
